@@ -197,7 +197,7 @@
       </div>
 
       <!-- TAB 4: DATA SCIENCE 1-CLICK MAGIC -->
-      <div id="tab-datasci" class="ribbon-tab-content hidden flex items-center gap-3">
+      <div id="tab-datasci" class="ribbon-tab-content hidden flex items-center gap-3 flex-wrap">
         <button id="ribbon-autoformat-btn" class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-pink-500 text-black font-extrabold text-xs shadow flex items-center gap-1.5">
           <i data-lucide="wand-2" class="w-4 h-4"></i> จัดหน้าทั้งเล่มอัตโนมัติ (1 คลิก)
         </button>
@@ -205,6 +205,25 @@
         <span class="text-xs text-slate-400 font-mono">
           ตรวจจับชื่อบท, หัวข้อย่อย 1.1, จัดขอบ 1.5", ย่อหน้า 0.5", ฟอนต์ TH Sarabun ครบจบในคลิกเดียว
         </span>
+
+        <div class="ribbon-separator"></div>
+
+        <!-- Gemini API Key Input UI -->
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="key" class="w-3.5 h-3.5 text-yellow-400 shrink-0"></i>
+          <span class="text-[11px] text-slate-400 font-mono shrink-0">Gemini API Key:</span>
+          <input
+            id="gemini-api-key-input"
+            type="password"
+            placeholder="วาง API Key ของคุณที่นี่..."
+            class="bg-slate-800 border border-slate-600 text-slate-200 text-[11px] rounded px-2 py-1 outline-none font-mono w-56 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30"
+            oninput="this.style.borderColor=''"
+          >
+          <button onclick="saveGeminiApiKey()" class="px-2.5 py-1 rounded bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-[11px] flex items-center gap-1 transition-all">
+            <i data-lucide="save" class="w-3 h-3"></i> บันทึก
+          </button>
+          <span id="api-key-status" class="text-[10px] font-mono text-slate-500"></span>
+        </div>
       </div>
 
     </div>

@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
   setupRibbonActions();
   setupFileDrop();
 
+  // Auto-load saved API key into input field
+  const savedKey = localStorage.getItem('gemini_api_key');
+  if (savedKey) {
+    const input = document.getElementById('gemini-api-key-input');
+    if (input) input.value = savedKey;
+    const status = document.getElementById('api-key-status');
+    if (status) { status.textContent = '✅ มี Key แล้ว'; status.className = 'text-[10px] font-mono text-emerald-400'; }
+  }
+
   // Load sample on initial load
   loadSampleMultiPageDoc();
 });
@@ -535,13 +544,19 @@ function sliceHtmlIntoPages(rawHtml) {
   let currentPageNodes = [];
   let currentSection = 'CH1';
   let charCountInPage = 0;
-  const CHARS_PER_A4_PAGE = 1200;
+  // ขยายขนาดหน้าให้สมจริง A4 ~2200 ตัวอักษรภาษาไทย
+  const CHARS_PER_A4_PAGE = 2200;
+
+  // Heading หลักที่บังคับขึ้นหน้าใหม่
+  const isMajorHeading = (text) =>
+    /^(บทที่\s*\d+|บทนำ|กิตติกรรมประกาศ|บทคัดย่อ|สารบัญ(?:ตาราง|ภาพ)?|เอกสารอ้างอิง|ภาคผนวก|เอกสารและงานวิจัย|วิธีดำเนินการ|ผลการดำเนินงาน|สรุป)/i.test(text);
 
   nodes.forEach(node => {
     const text = node.textContent.trim();
-    const isMajorHeading = /^บทที่\s*\d+|^บทนำ|^กิตติกรรมประกาศ|^บทคัดย่อ|^สารบัญ|^เอกสารอ้างอิง|^ภาคผนวก/i.test(text);
+    const isMajor = isMajorHeading(text);
 
-    if ((isMajorHeading && currentPageNodes.length > 0) || charCountInPage > CHARS_PER_A4_PAGE) {
+    // ขึ้นหน้าใหม่เมื่อเจอ heading หลัก หรือหน้าเต็มแล้ว
+    if ((isMajor && currentPageNodes.length > 0) || charCountInPage > CHARS_PER_A4_PAGE) {
       pagesData.push({
         id: `page-${Date.now()}-${pagesData.length}`,
         sectionKey: currentSection,
@@ -551,11 +566,11 @@ function sliceHtmlIntoPages(rawHtml) {
       });
       currentPageNodes = [];
       charCountInPage = 0;
-      if (isMajorHeading) {
-        if (/^กิตติกรรม/i.test(text)) currentSection = 'ACKNOWLEDGEMENT';
-        else if (/^บทคัดย่อ/i.test(text)) currentSection = 'ABSTRACT';
-        else if (/^สารบัญ/i.test(text)) currentSection = 'TOC';
-        else currentSection = 'CH1';
+
+      // FIX: ตรวจจับบทที่ 1-5 และหน้าพิเศษให้ถูกต้อง
+      if (isMajor) {
+        const detected = window.dsEngine?.detectSectionKey(text);
+        if (detected) currentSection = detected;
       }
     }
 
@@ -563,6 +578,7 @@ function sliceHtmlIntoPages(rawHtml) {
     charCountInPage += text.length;
   });
 
+  // Push หน้าสุดท้าย
   if (currentPageNodes.length > 0) {
     pagesData.push({
       id: `page-${Date.now()}-${pagesData.length}`,
@@ -576,12 +592,33 @@ function sliceHtmlIntoPages(rawHtml) {
   recalculatePageNumbers();
   renderPagesToScreen();
   runDataScienceAutoFormat();
-  showToast(`แบ่งเอกสารออกเป็น ${pagesData.length} หน้าตามจริงเรียบร้อย`, 'success');
+  showToast(`แบ่งเอกสารออกเป็น ${pagesData.length} หน้าเรียบร้อย`, 'success');
 }
 
 // API key is stored securely in browser localStorage — never hardcoded in source
 function getGeminiApiKey() {
   return localStorage.getItem('gemini_api_key') || '';
+}
+
+// Save Gemini API Key from UI input into localStorage
+function saveGeminiApiKey() {
+  const input = document.getElementById('gemini-api-key-input');
+  const status = document.getElementById('api-key-status');
+  const key = input?.value?.trim();
+
+  if (!key) {
+    if (status) { status.textContent = '❌ กรุณากรอก Key'; status.className = 'text-[10px] font-mono text-rose-400'; }
+    return;
+  }
+
+  localStorage.setItem('gemini_api_key', key);
+  if (status) { status.textContent = '✅ บันทึกแล้ว!'; status.className = 'text-[10px] font-mono text-emerald-400'; }
+  showToast('✅ บันทึก Gemini API Key ใน localStorage แล้ว — พร้อมใช้งาน AI!', 'success');
+
+  // Auto-hide status after 4s
+  setTimeout(() => {
+    if (status) { status.textContent = '✅ มี Key แล้ว'; status.className = 'text-[10px] font-mono text-slate-500'; }
+  }, 4000);
 }
 
 // Call Google Gemini API (gemini-flash-latest)
