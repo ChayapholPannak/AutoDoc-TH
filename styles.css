@@ -1,0 +1,322 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Prompt:wght@300;400;500;600;700&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --primary: #00d2ff;
+  --primary-glow: rgba(0, 210, 255, 0.3);
+  --chula-pink: #de006a;
+  --bg-dark: #0b0f19;
+  --ribbon-bg: #111827;
+  --card-border: rgba(255, 255, 255, 0.08);
+  
+  /* A4 Dimensions (210mm x 297mm) */
+  --a4-width: 210mm;
+  --a4-height: 297mm;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-dark);
+  color: #f1f5f9;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Glassmorphism Elements */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+}
+
+/* Word Companion Ribbon Navigation */
+.ribbon-tab-btn {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #94a3b8;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.ribbon-tab-btn:hover {
+  color: #f8fafc;
+}
+
+.ribbon-tab-btn.active {
+  color: #00d2ff;
+  border-bottom-color: #00d2ff;
+  font-weight: 600;
+}
+
+.ribbon-tool-btn {
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ribbon-tool-btn:hover {
+  background-color: rgba(0, 210, 255, 0.1);
+  color: #00d2ff;
+  border-color: rgba(0, 210, 255, 0.3);
+}
+
+.ribbon-tool-btn:active {
+  transform: scale(0.97);
+}
+
+.ribbon-separator {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 0 0.4rem;
+}
+
+/* Multi-Page A4 Canvas */
+.a4-page-container {
+  background-color: #080c14;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.a4-sheet {
+  width: var(--a4-width);
+  height: var(--a4-height);
+  min-height: var(--a4-height);
+  max-height: var(--a4-height);
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 0, 0, 0.15);
+  margin: 2rem auto;
+  position: relative;
+  transition: all 0.2s ease;
+  font-family: 'Sarabun', 'TH Sarabun PSK', 'TH Sarabun New', sans-serif;
+  line-height: 1.25;
+  overflow: hidden;
+  page-break-after: always;
+}
+
+/* Page Badges */
+.page-sheet-badge {
+  position: absolute;
+  top: -26px;
+  left: 0;
+  font-family: monospace;
+  font-size: 11px;
+  background-color: #1e293b;
+  color: #94a3b8;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.page-section-tag {
+  position: absolute;
+  top: -26px;
+  right: 0;
+  font-family: 'Prompt', sans-serif;
+  font-size: 11px;
+  background-color: rgba(0, 210, 255, 0.1);
+  color: #00d2ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 210, 255, 0.2);
+}
+
+/* Academic Margins (บน 1.5", ซ้าย 1.5", ขวา 1.0", ล่าง 1.0") */
+.margin-academic {
+  padding-top: 3.81cm;
+  padding-left: 3.81cm;
+  padding-right: 2.54cm;
+  padding-bottom: 2.54cm;
+}
+
+.margin-standard {
+  padding: 2.54cm;
+}
+
+.margin-narrow {
+  padding: 1.27cm;
+}
+
+/* Cover Page Layout */
+.cover-page-layout {
+  padding: 3.81cm 2.54cm 3.0cm 2.54cm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  height: 100%;
+}
+
+.cover-page-layout h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  margin-bottom: 8pt;
+}
+
+.cover-page-layout h2 {
+  font-size: 18pt;
+  font-weight: 700;
+  margin-bottom: 20pt;
+}
+
+.cover-meta-section {
+  font-size: 16pt;
+  line-height: 1.6;
+}
+
+.cover-footer-school {
+  font-size: 15pt;
+  line-height: 1.4;
+}
+
+/* Academic Typography */
+.a4-sheet h1.doc-chapter {
+  text-align: center;
+  font-size: 20pt;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 12pt;
+  line-height: 1.3;
+}
+
+.a4-sheet h2.doc-heading {
+  font-size: 18pt;
+  font-weight: 700;
+  margin-top: 14pt;
+  margin-bottom: 6pt;
+  line-height: 1.3;
+}
+
+.a4-sheet h3.doc-subheading {
+  font-size: 16pt;
+  font-weight: 700;
+  margin-top: 10pt;
+  margin-bottom: 4pt;
+  line-height: 1.3;
+}
+
+.a4-sheet p.doc-paragraph {
+  font-size: 16pt;
+  font-weight: 400;
+  text-indent: 1.27cm; /* ย่อหน้าเยื้อง 0.5 นิ้ว */
+  text-align: justify;
+  margin-bottom: 6pt;
+  line-height: 1.25;
+}
+
+/* Captions */
+.doc-table-caption {
+  font-size: 16pt;
+  font-weight: 700;
+  text-align: left;
+  margin-top: 8pt;
+  margin-bottom: 4pt;
+}
+
+.doc-figure-caption {
+  font-size: 16pt;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 6pt;
+  margin-bottom: 2pt;
+}
+
+.doc-source-citation {
+  font-size: 14pt;
+  font-style: italic;
+  text-align: center;
+  color: #374151;
+  margin-bottom: 8pt;
+}
+
+/* Page Number Simulation in Header */
+.page-number-header {
+  position: absolute;
+  top: 1.5cm;
+  right: 2.54cm;
+  font-size: 14pt;
+  font-family: 'Sarabun', sans-serif;
+  color: #1f2937;
+  pointer-events: none;
+}
+
+/* Hover on editable blocks */
+.editable-element:hover {
+  outline: 2px dashed rgba(0, 210, 255, 0.45);
+  background-color: rgba(0, 210, 255, 0.03);
+  cursor: text;
+}
+
+/* Tables */
+.a4-sheet table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8pt 0;
+  font-size: 14pt;
+}
+
+.a4-sheet th, .a4-sheet td {
+  border: 1px solid #1f2937;
+  padding: 4pt 6pt;
+  text-align: left;
+}
+
+.a4-sheet th {
+  background-color: #f3f4f6;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Page Control Toolbar */
+.page-controls-bar {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.a4-sheet:hover .page-controls-bar {
+  opacity: 1;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background-color: #fff;
+    overflow: visible;
+  }
+  header, nav, aside, .page-sheet-badge, .page-section-tag, .page-controls-bar, #ribbon-toolbar {
+    display: none !important;
+  }
+  .a4-page-container {
+    padding: 0 !important;
+    background: none !important;
+  }
+  .a4-sheet {
+    box-shadow: none !important;
+    margin: 0 !important;
+    page-break-after: always !important;
+  }
+}
